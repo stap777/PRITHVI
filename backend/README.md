@@ -6,7 +6,7 @@ This digital twin simulates regional microclimate scenarios, models multi-hazard
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 The backend is built around a layered architecture separating concerns between API Routing, Business Services, Physics-based Simulations, Machine Learning, and Repository (Geospatial/Raster IO) layers.
 
@@ -57,7 +57,7 @@ graph TD
 
 ---
 
-## 📁 Directory Structure
+## Directory Structure
 
 ```
 backend/
@@ -118,7 +118,7 @@ backend/
 
 ---
 
-## 🛠️ Installation & Setup
+## Installation and Setup
 
 ### Prerequisites
 * Python 3.12+
@@ -156,7 +156,7 @@ Open your browser to:
 
 ---
 
-## 🐳 Running with Docker
+## Running with Docker
 
 Build and launch the containerized application:
 ```bash
@@ -166,7 +166,7 @@ docker run -p 8000:8000 --env-file .env climate-twin-backend
 
 ---
 
-## 🤝 Git Workflow & Branching Strategy
+## Git Workflow and Branching Strategy
 
 Our team coordinates code integration using the following branching structure:
 
@@ -182,7 +182,7 @@ Our team coordinates code integration using the following branching structure:
 
 ---
 
-## 🚀 Future Roadmap
+## Future Roadmap
 
 - [ ] **Data Pipeline Integration**: Configure scheduled airflow/cron triggers for IMD NetCDF feeds.
 - [ ] **AI Inference Pipeline**: Connect ConvLSTM model weights for geospatial next-frame precipitation forecasting.
