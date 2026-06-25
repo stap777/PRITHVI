@@ -1,0 +1,73 @@
+PRITHVI - Team Contribution and Git Workflow Guide
+
+This document establishes the Git workflow and rules for contributing code to the PRITHVI repository during the hackathon. Follow these steps and rules to avoid code conflicts and maintain a clean commit history.
+
+================================================================================
+1. Branching Model
+================================================================================
+
+* main:    Protected production branch. Contains stable, deployable code.
+           No developer should commit directly to main.
+* dev:     Active development branch. All team feature integrations happen here.
+           No developer should commit directly to dev.
+* feature/ Individual task branches. Always branched off dev.
+           Examples: feature/ingest-imd, feature/drought-index-model
+
+================================================================================
+2. Step-by-Step Workflow
+================================================================================
+
+Step 1: Pull the Latest Code
+Before starting any work, switch to the dev branch and pull the latest changes.
+    git checkout dev
+    git pull origin dev
+
+Step 2: Create a Feature Branch
+Create a branch specifically for your task. Use a clear, descriptive name.
+    git checkout -b feature/your-feature-name
+
+Step 3: Implement and Test Your Changes
+Write your code inside the feature branch. Before committing, run the test suite:
+    pytest backend/tests/
+
+Step 4: Stage and Commit Changes
+Verify your modified files, stage them, and write a descriptive commit message.
+    git status
+    git add .
+    git commit -m "feat: add IMD gridded parser logic"
+
+Step 5: Sync with dev (Resolve Conflicts Early)
+Before pushing your branch, pull any new code your team members pushed to dev and merge it into your branch to resolve conflicts locally.
+    git checkout dev
+    git pull origin dev
+    git checkout feature/your-feature-name
+    git merge dev
+    # If there are merge conflicts, resolve them in your editor, then:
+    # git add .
+    # git commit -m "merge dev into feature/your-feature-name"
+
+Step 6: Push Your Branch to GitHub
+Publish your feature branch to the remote repository.
+    git push -u origin feature/your-feature-name
+
+Step 7: Create a Pull Request (PR)
+1. Navigate to the GitHub repository (https://github.com/stap777/PRITHVI.git).
+2. Click "Compare & pull request".
+3. Verify that the base branch is set to 'dev' (NOT 'main').
+4. Fill out a brief description of what you implemented.
+5. Assign a team member to review and approve the merge.
+
+Step 8: Clean Up Local Branches
+After your pull request is approved and merged on GitHub, clean up your local environment.
+    git checkout dev
+    git pull origin dev
+    git branch -d feature/your-feature-name
+
+================================================================================
+3. Coding Rules and Best Practices
+================================================================================
+
+* Code Quality: Format code cleanly according to PEP 8 standards. Write comments for complex math or algorithms.
+* Docstrings: Every new service function, repository method, and utility must include a docstring explaining parameters, return values, and expected exceptions.
+* Testing: Never commit code that breaks the existing tests. If you write a new feature, write a corresponding test file under backend/tests/.
+* Commits: Keep commits focused on one logical change. Avoid giant commits that change multiple unrelated modules.
