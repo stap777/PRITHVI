@@ -1,18 +1,14 @@
 """
 Custom Exceptions and Global Exception Handlers.
 
-This module defines domain-specific exceptions for the Climate Digital Twin,
-and provides middleware-like handlers to catch and map these errors to standardized
-REST API responses.
+Purpose:
+    This module defines domain-specific exceptions for the Climate Digital Twin,
+    and provides middleware-like handlers to catch and map these errors to standardized
+    REST API responses.
 
-Classes:
-    ClimateTwinError: Base exception for all custom domain errors.
-    GeospatialDataError: Raised when parsing/finding raster or vector data fails.
-    ModelLoadError: Raised when ML model file retrieval or loading fails.
-    SimulationError: Raised when numerical simulations run out of bounds or fail.
-
-Functions:
-    register_exception_handlers: Configures exception handlers on a FastAPI instance.
+Future Responsibilities:
+    * Establish telemetry alerts for unexpected application failures.
+    * Handle model loading timeout issues and clean up memory on ML validation errors.
 
 TODO:
     * Integrate error alert/telemetry forwarding (e.g., Sentry).

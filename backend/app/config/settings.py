@@ -1,16 +1,18 @@
 """
 Application Configuration Settings.
 
-This module defines the Pydantic Settings class to manage environment variables 
-for the Climate Digital Twin Backend. It leverages pydantic-settings to validate
-types and load defaults.
+Purpose:
+    This module defines the Pydantic Settings class to manage environment variables 
+    for the Climate Digital Twin Backend. It leverages pydantic-settings to validate
+    types and load defaults.
 
-Classes:
-    Settings: Global application configuration class.
-
-TODO:
+Future Responsibilities:
     * Set up secret management integrations for AWS Secrets Manager or Vault if deployed to cloud.
     * Expand database connection strings once DB flavor is chosen.
+    * Configure credentials validation rules for third-party geospatial API sources.
+
+TODO:
+    * Map regional weather API endpoints dynamically from configuration profiles.
 """
 
 from typing import List, Optional

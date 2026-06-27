@@ -1,8 +1,13 @@
 """
 Domain and Physical Constants.
 
-This module stores read-only constants used across the Climate Digital Twin platform,
-including physical calculations, geodetic boundaries, and default parameters.
+Purpose:
+    This module stores read-only constants used across the Climate Digital Twin platform,
+    including physical calculations, geodetic boundaries, and default parameters.
+
+Future Responsibilities:
+    * Store physical constants for agricultural, hydrological, and meteorological models.
+    * Maintain projection CRS mappings and geospatial boundary coordinate constants.
 
 TODO:
     * Align coordinate limits with official Survey of India boundary parameters.

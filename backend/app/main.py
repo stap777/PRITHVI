@@ -1,13 +1,19 @@
 """
 FastAPI Main Application Entry Point.
 
-This module initializes the FastAPI application instance, registers core middleware
-(like CORS), registers API routers, configures custom exception handlers, and manages
-the application lifespan (startup and shutdown logic).
+Purpose:
+    This module initializes the FastAPI application instance, registers core middleware
+    (like CORS), registers API routers, configures custom exception handlers, and manages
+    the application lifespan (startup and shutdown logic).
+
+Future Responsibilities:
+    * Initialize connection pools to databases and Redis cache on startup.
+    * Release socket connections and dump telemetry metrics on shutdown.
+    * Warm up and pre-load PyTorch/ONNX ML models in the lifespan context.
 
 TODO:
-    * Set up database connection pool inside the lifespan event.
-    * Warm up ML models on startup.
+    * Integrate database session creation in application lifespan.
+    * Add automated cache warmup sequences on startup.
 """
 
 from contextlib import asynccontextmanager
@@ -18,16 +24,13 @@ from loguru import logger
 from app.config.settings import settings
 from app.api.router import api_router
 from app.exceptions.handlers import register_exception_handlers
+import app.utils.logger
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
     Asynchronous lifespan manager handling startup and shutdown operations.
-    
-    Operations:
-        - Startup: Verify config settings, check directory structure, pre-load ML model signatures.
-        - Shutdown: Release DB connections, close network clients, clear active thread pools.
     """
     # ----------------------------------------
     # Startup Sequence
@@ -52,7 +55,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.APP_NAME,
     description="AI-Powered Digital Twin platform for modeling historical climate changes and predicting disaster scenarios across India.",
-    version="1.0.0",
+    version="0.1.0",
     lifespan=lifespan,
     docs_url="/docs" if settings.ENV != "prod" else None,
     redoc_url="/redoc" if settings.ENV != "prod" else None,
@@ -74,6 +77,22 @@ register_exception_handlers(app)
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
+# Direct health check endpoint at root level
+@app.get("/health", tags=["System Health"], status_code=status.HTTP_200_OK)
+async def get_health():
+    """
+    Direct health check endpoint.
+    
+    Returns:
+        JSON response with the service health status.
+    """
+    return {
+        "status": "healthy",
+        "service": "PRITHVI Backend",
+        "version": app.version
+    }
+
+
 # Root/Index Direct Health Redirect
 @app.get("/", tags=["Root"], status_code=status.HTTP_200_OK)
 async def read_root():
@@ -88,3 +107,4 @@ async def read_root():
         "version": app.version,
         "status": "online"
     }
+
