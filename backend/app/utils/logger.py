@@ -1,11 +1,16 @@
 """
 Structured Logging Configuration.
 
-This module configures the Loguru logger to output formatted logs to stdout 
-and rotating log files on disk.
+Purpose:
+    This module configures the Loguru logger to output formatted logs to stdout 
+    and rotating log files on disk.
+
+Future Responsibilities:
+    * Integrate logging forwarder to standard JSON formats for cloud aggregators (e.g., Datadog, AWS CloudWatch).
+    * Set up log rotation policies based on disk usage metrics.
 
 TODO:
-    * Integrate logging forwarder to standard JSON formats for cloud aggregators.
+    * Add custom context-aware headers (such as trace IDs) in log formatters.
 """
 
 import sys
