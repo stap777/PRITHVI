@@ -1,0 +1,137 @@
+[
+  {
+    "date": "2026-06-01",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 30.5,
+    "Rainfall": 12.5,
+    "LST": 32.1,
+    "SST": 27.2
+  },
+  {
+    "date": "2026-06-02",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 31.0,
+    "Rainfall": 5.0,
+    "LST": 33.2,
+    "SST": 27.5
+  },
+  {
+    "date": "2026-06-03",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 29.8,
+    "Rainfall": 25.4,
+    "LST": 30.5,
+    "SST": 27.1
+  },
+  {
+    "date": "2026-06-04",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 28.5,
+    "Rainfall": 40.0,
+    "LST": 29.2,
+    "SST": 26.8
+  },
+  {
+    "date": "2026-06-05",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 28.0,
+    "Rainfall": 55.2,
+    "LST": 28.4,
+    "SST": 26.5
+  },
+  {
+    "date": "2026-06-06",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 29.2,
+    "Rainfall": 15.0,
+    "LST": 31.0,
+    "SST": 27.0
+  },
+  {
+    "date": "2026-06-07",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 30.1,
+    "Rainfall": 2.5,
+    "LST": 32.8,
+    "SST": 27.3
+  },
+  {
+    "date": "2026-06-08",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 30.8,
+    "Rainfall": 0.0,
+    "LST": 33.5,
+    "SST": 27.6
+  },
+  {
+    "date": "2026-06-09",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 31.5,
+    "Rainfall": 0.0,
+    "LST": 34.2,
+    "SST": 27.8
+  },
+  {
+    "date": "2026-06-10",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 32.0,
+    "Rainfall": 0.0,
+    "LST": 35.0,
+    "SST": 28.0
+  },
+  {
+    "date": "2026-06-11",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 29.5,
+    "Rainfall": 18.2,
+    "LST": 31.1,
+    "SST": 27.2
+  },
+  {
+    "date": "2026-06-12",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 27.8,
+    "Rainfall": 65.4,
+    "LST": 28.1,
+    "SST": 26.2
+  },
+  {
+    "date": "2026-06-13",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 28.2,
+    "Rainfall": 32.1,
+    "LST": 29.5,
+    "SST": 26.7
+  },
+  {
+    "date": "2026-06-14",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 29.0,
+    "Rainfall": 8.5,
+    "LST": 31.3,
+    "SST": 27.1
+  },
+  {
+    "date": "2026-06-15",
+    "state": "Maharashtra",
+    "district": "Ratnagiri",
+    "Temperature": 29.5,
+    "Rainfall": 3.0,
+    "LST": 32.0,
+    "SST": 27.4
+  }
+]

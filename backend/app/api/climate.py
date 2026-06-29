@@ -7,24 +7,47 @@ Purpose:
 """
 
 from datetime import date
-from typing import List
-from fastapi import APIRouter, Query, status, HTTPException
+from typing import List, Optional
+from fastapi import APIRouter, Query, status, HTTPException, Depends
 from app.schemas import (
     CommonResponse,
     ClimateHistoryResponse,
     ClimateOverviewResponse,
     ClimateParameter,
 )
+from app.repositories import BaseClimateRepository, ClimateRepository
+from app.services import ClimateService
 from app.api.prediction import router as prediction_router
 from app.api.simulation import router as simulation_router
 
 router = APIRouter()
 
+# Dependency Injection Resolvers
+_repo_instance: Optional[BaseClimateRepository] = None
+
+
+def get_climate_repository() -> BaseClimateRepository:
+    """
+    Returns a singleton instance of the BaseClimateRepository implementation.
+    """
+    global _repo_instance
+    if _repo_instance is None:
+        _repo_instance = ClimateRepository()
+    return _repo_instance
+
+
+def get_climate_service(
+    repo: BaseClimateRepository = Depends(get_climate_repository),
+) -> ClimateService:
+    """
+    Dependency resolver for ClimateService.
+    """
+    return ClimateService(repo)
+
 
 @router.get(
     "/history",
     response_model=ClimateHistoryResponse,
-    status_code=status.HTTP_501_NOT_IMPLEMENTED,
     summary="Get Historical Climate Data",
     description="Retrieves a history timeline of selected climate parameters for an Indian State and district.",
 )
@@ -37,7 +60,7 @@ async def get_history(
     district: str = Query(
         ...,
         min_length=2,
-        description="Name of the district (e.g. 'Pune')"
+        description="Name of the district (e.g. 'Ratnagiri')"
     ),
     start_date: date = Query(
         ...,
@@ -51,14 +74,15 @@ async def get_history(
         ...,
         description="List of climate parameters to fetch (e.g., ['Temperature', 'Rainfall'])."
     ),
+    service: ClimateService = Depends(get_climate_service),
 ):
     """
-    Validates range dates and returns HTTP 501 (Not Implemented) for Sprint 2.
+    Validates range dates and returns historical climate observations from service layer.
     """
     if start_date > end_date:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=[
+        from fastapi.exceptions import RequestValidationError
+        raise RequestValidationError(
+            errors=[
                 {
                     "loc": ["query", "start_date"],
                     "msg": "start_date must be before or equal to end_date",
@@ -66,16 +90,18 @@ async def get_history(
                 }
             ]
         )
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Historical dataset access is not implemented."
+    return service.get_historical_data(
+        state=state,
+        district=district,
+        start_date=start_date,
+        end_date=end_date,
+        variables=variables,
     )
 
 
 @router.get(
     "/current",
     response_model=CommonResponse,
-    status_code=status.HTTP_501_NOT_IMPLEMENTED,
     summary="Get Current Climate Metrics",
     description="Retrieves near real-time observed parameters for an Indian State and district.",
 )
@@ -88,19 +114,21 @@ async def get_current(
     district: str = Query(
         ...,
         min_length=2,
-        description="Name of the district (e.g. 'Pune')"
+        description="Name of the district (e.g. 'Ratnagiri')"
     ),
     variables: List[ClimateParameter] = Query(
         ...,
         description="List of climate parameters to query."
     ),
+    service: ClimateService = Depends(get_climate_service),
 ):
     """
-    Retrieves current climate data. Returns HTTP 501 (Not Implemented) for Sprint 2.
+    Retrieves current climate data from the service layer.
     """
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Live observation sensors data feed integration is not implemented."
+    return service.get_current_data(
+        state=state,
+        district=district,
+        variables=variables,
     )
 
 
@@ -120,11 +148,11 @@ async def get_overview(
     district: str = Query(
         ...,
         min_length=2,
-        description="Name of the district (e.g. 'Pune')"
+        description="Name of the district (e.g. 'Ratnagiri')"
     ),
 ):
     """
-    Retrieves dashboard overview. Returns HTTP 501 (Not Implemented) for Sprint 2.
+    Retrieves dashboard overview. Returns HTTP 501 (Not Implemented) for Sprint 3.
     """
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,

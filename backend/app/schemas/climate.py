@@ -6,8 +6,26 @@ Purpose:
 """
 
 from datetime import date
-from typing import Any, Dict, List, Literal
+from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
+
+
+class ClimateRecord(BaseModel):
+    """
+    Domain model representing a single daily climate measurement.
+    """
+    date: date
+    state: str
+    district: str
+    temperature: Optional[float] = Field(None, alias="Temperature")
+    rainfall: Optional[float] = Field(None, alias="Rainfall")
+    lst: Optional[float] = Field(None, alias="LST")
+    sst: Optional[float] = Field(None, alias="SST")
+
+    model_config = {
+        "populate_by_name": True
+    }
+
 
 
 class ClimateHistoryResponse(BaseModel):
