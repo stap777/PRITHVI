@@ -2,20 +2,15 @@
 Custom Exceptions and Global Exception Handlers.
 
 Purpose:
-    This module defines domain-specific exceptions for the Climate Digital Twin,
+    Defines domain-specific exceptions for the Climate Digital Twin,
     and provides middleware-like handlers to catch and map these errors to standardized
     REST API responses.
-
-Future Responsibilities:
-    * Establish telemetry alerts for unexpected application failures.
-    * Handle model loading timeout issues and clean up memory on ML validation errors.
-
-TODO:
-    * Integrate error alert/telemetry forwarding (e.g., Sentry).
 """
 
+from datetime import datetime, timezone
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from loguru import logger
 
 
@@ -45,6 +40,11 @@ class SimulationError(ClimateTwinError):
     pass
 
 
+class DistrictNotFoundError(ClimateTwinError):
+    """Raised when the requested state/district combination does not exist in the catalog."""
+    pass
+
+
 # ==============================================================================
 # Global Exception Registration
 # ==============================================================================
@@ -56,18 +56,29 @@ def register_exception_handlers(app: FastAPI) -> None:
         app: The target FastAPI application instance.
     """
     
+    @app.exception_handler(DistrictNotFoundError)
+    async def district_not_found_exception_handler(request: Request, exc: DistrictNotFoundError) -> JSONResponse:
+        logger.error(f"District Not Found: {exc.message} | Path: {request.url.path}")
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={
+                "status": "error",
+                "message": exc.message,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "errors": [exc.details] if exc.details else None
+            }
+        )
+
     @app.exception_handler(ClimateTwinError)
     async def climate_twin_exception_handler(request: Request, exc: ClimateTwinError) -> JSONResponse:
         logger.error(f"Domain Error: {exc.message} | Details: {exc.details} | Path: {request.url.path}")
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={
-                "success": False,
-                "error": {
-                    "code": exc.__class__.__name__,
-                    "message": exc.message,
-                    "details": exc.details
-                }
+                "status": "error",
+                "message": exc.message,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "errors": [exc.details] if exc.details else None
             }
         )
 
@@ -77,12 +88,10 @@ def register_exception_handlers(app: FastAPI) -> None:
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             content={
-                "success": False,
-                "error": {
-                    "code": "GEOSPATIAL_VALIDATION_ERROR",
-                    "message": exc.message,
-                    "details": exc.details
-                }
+                "status": "error",
+                "message": exc.message,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "errors": [exc.details] if exc.details else None
             }
         )
 
@@ -92,12 +101,30 @@ def register_exception_handlers(app: FastAPI) -> None:
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             content={
-                "success": False,
-                "error": {
-                    "code": "ML_MODEL_ERROR",
-                    "message": exc.message,
-                    "details": exc.details
-                }
+                "status": "error",
+                "message": exc.message,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "errors": [exc.details] if exc.details else None
+            }
+        )
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+        errors = []
+        for err in exc.errors():
+            errors.append({
+                "loc": [str(x) for x in err["loc"]],
+                "msg": err["msg"],
+                "type": err["type"]
+            })
+        logger.warning(f"Request Validation Failure: {errors} | Path: {request.url.path}")
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            content={
+                "status": "error",
+                "message": "Validation failed.",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "errors": errors
             }
         )
 
@@ -107,11 +134,9 @@ def register_exception_handlers(app: FastAPI) -> None:
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
-                "success": False,
-                "error": {
-                    "code": "INTERNAL_SERVER_ERROR",
-                    "message": "An unexpected server-side error occurred. Please try again later.",
-                    "details": {}
-                }
+                "status": "error",
+                "message": "An unexpected server-side error occurred. Please try again later.",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "errors": None
             }
         )

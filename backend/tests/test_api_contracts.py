@@ -17,20 +17,20 @@ client = TestClient(app)
 # Climate History Endpoint (/api/v1/climate/history)
 # ----------------------------------------------------
 
-def test_climate_history_success_stub():
-    """Asserts that a valid historical request returns 501 Not Implemented."""
+def test_climate_history_success_implemented():
+    """Asserts that a valid historical request returns 200 OK."""
     response = client.get(
         "/api/v1/climate/history",
         params={
             "state": "Maharashtra",
-            "district": "Pune",
-            "start_date": "2023-01-01",
-            "end_date": "2023-01-10",
+            "district": "Ratnagiri",
+            "start_date": "2026-06-01",
+            "end_date": "2026-06-10",
             "variables": ["Temperature", "Rainfall"]
         }
     )
-    assert response.status_code == 501
-    assert "Historical dataset access is not implemented." in response.json()["detail"]
+    assert response.status_code == 200
+    assert response.json()["status"] == "success"
 
 
 def test_climate_history_missing_params():
@@ -74,18 +74,18 @@ def test_climate_history_invalid_parameter():
 # Climate Current Endpoint (/api/v1/climate/current)
 # ----------------------------------------------------
 
-def test_climate_current_success_stub():
-    """Asserts that a valid current observation request returns 501 Not Implemented."""
+def test_climate_current_success_implemented():
+    """Asserts that a valid current request returns 200 OK."""
     response = client.get(
         "/api/v1/climate/current",
         params={
             "state": "Maharashtra",
-            "district": "Pune",
+            "district": "Ratnagiri",
             "variables": ["LST", "SST"]
         }
     )
-    assert response.status_code == 501
-    assert "Live observation sensors data feed integration is not implemented." in response.json()["detail"]
+    assert response.status_code == 200
+    assert response.json()["status"] == "success"
 
 
 def test_climate_current_validation_failure():
