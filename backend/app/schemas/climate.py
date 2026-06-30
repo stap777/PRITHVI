@@ -27,6 +27,14 @@ class ClimateRecord(BaseModel):
     }
 
 
+class RainfallObservation(BaseModel):
+    """
+    Domain model representing a single NetCDF rainfall observation at a grid point.
+    """
+    date: date
+    latitude: float
+    longitude: float
+    rainfall_mm: float
 
 class ClimateHistoryResponse(BaseModel):
     """
