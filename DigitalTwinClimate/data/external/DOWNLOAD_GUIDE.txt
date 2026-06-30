@@ -1,0 +1,8 @@
+========================================================
+BHUVAN GEOPORTAL EXTERNAL MAP DATA
+URL: https://bhuvan.nrsc.gov.in/ngmaps
+========================================================
+Instructions:
+1. Search for Administrative/District Boundaries or Digital Elevation Models (DEM) for India.
+2. Download the vector shapefiles (.shp) or GeoTIFF raster assets.
+3. Place them here in data/external/ to use for spatial plotting and dashboard mapping.
