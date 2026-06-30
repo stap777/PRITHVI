@@ -2,14 +2,24 @@
 Schemas Package.
 
 Purpose:
-    This package will store Pydantic models for incoming request bodies 
-    and serialized outgoing API responses.
-
-Future Responsibilities:
-    * Climate Schemas: Model validation for coordinates and time limits.
-    * Prediction Schemas: Structures for input features and predicted parameters.
-    * Simulation Schemas: Scenarios data contracts and GeoJSON geometries.
-
-TODO:
-    * Draft API contracts and request/response models in Sprint 2.
+    Exposes Pydantic schemas and enums defining the backend API contracts.
 """
+
+from app.schemas.enums import ClimateParameter
+from app.schemas.common import CommonResponse, ErrorResponse
+from app.schemas.climate import ClimateHistoryResponse, ClimateOverviewResponse
+from app.schemas.prediction import PredictionResponse
+from app.schemas.simulation import SimulationRequest, SimulationResponse
+from app.schemas.metadata import MetadataResponse
+
+__all__ = [
+    "ClimateParameter",
+    "CommonResponse",
+    "ErrorResponse",
+    "ClimateHistoryResponse",
+    "ClimateOverviewResponse",
+    "PredictionResponse",
+    "SimulationRequest",
+    "SimulationResponse",
+    "MetadataResponse",
+]
